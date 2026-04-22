@@ -1,0 +1,31 @@
+name: Descomprimir y Publicar Web
+on:
+  push:
+    branches:
+      - main  # Se ejecuta cada vez que subes algo a la rama principal
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Descomprimir ZIP
+        run: unzip archivo.zip -d ./mi-web  # Descomprime el zip en una carpeta temporal
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v4
+
+      - name: Subir a GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './mi-web'  # Publica el contenido de esa carpeta
+
+      - name: Desplegar
+        uses: actions/deploy-pages@v4
